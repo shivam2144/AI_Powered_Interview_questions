@@ -107,6 +107,10 @@ function Interview() {
   };
 
   const handleSkipQuestion = () => {
+    if (!window.confirm('Are you sure you want to skip this question? You will receive 0 points.')) {
+      return;
+    }
+
     const newSessionData = [...sessionData, {
       question: questions[currentQuestionIndex].question,
       userAnswer: 'Skipped',
@@ -198,6 +202,12 @@ function Interview() {
         <div className="progress-indicator">
           Question {currentQuestionIndex + 1} of {questions.length}
         </div>
+        <div className="progress-bar-container">
+          <div 
+            className="progress-bar-fill" 
+            style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+          ></div>
+        </div>
       </div>
 
       <div className="card interview-card">
@@ -233,15 +243,19 @@ function Interview() {
         </div>
 
         <div className="interview-actions">
-          <button className="btn btn-secondary" onClick={handleSkipQuestion}>
-            Skip Question
+          <button 
+            className="btn btn-secondary" 
+            onClick={handleSkipQuestion}
+            disabled={evaluating}
+          >
+            ⏭️ Skip Question
           </button>
           <button
             className="btn btn-primary"
             onClick={handleSubmitAnswer}
             disabled={evaluating || !answer.trim()}
           >
-            {evaluating ? 'Evaluating...' : 'Submit Answer'}
+            {evaluating ? '⏳ Evaluating...' : '✅ Submit Answer'}
           </button>
         </div>
 
